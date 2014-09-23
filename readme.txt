@@ -17,9 +17,9 @@ very complex.
 
 The widget has many CSS classes and IDs to style it with, but it's
 been left purposely unstyled so you can format it in whatever way you
-want. The included recurring-style.css and recurring-style.css-example
+want. The included recurring-timer.css and recurring-timer.css-example
 files show how you can move the time and labels around for a custom
-look. You can customize recurring-style.css by copying it to your
+look. You can customize recurring-timer.css by copying it to your
 active theme's folder.
 
 Known issues:
