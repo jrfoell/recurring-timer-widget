@@ -151,7 +151,7 @@ jQuery(document).ready(function($){
 		//add a '+' if they forgot it
 		$event_duration = strpos( $event_duration, '+' ) === 0 ? $event_duration : '+' . $event_duration;
 
-		$now = time();
+		$now = current_time( 'timestamp' );
 		//initialize event_start and event_start_next to the same value
 		$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
 
