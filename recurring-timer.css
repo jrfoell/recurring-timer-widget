@@ -1,0 +1,18 @@
+/* 
+
+** DO NOT MODIFY THIS FILE **
+
+It will be overwritten on plugin upgrade. Instead copy this file (or
+recurring-timer.css-example) to your theme's folder as
+recurring-timer.css. The plugin will load and prefer that one
+instead. You may modify the copied version safely and remove this
+warning message from the copied file.
+
+*/ 
+
+label[for=rt-days], 
+label[for=rt-hours], 
+label[for=rt-minutes], 
+label[for=rt-seconds] { 
+	padding-left: 0.25em;
+}

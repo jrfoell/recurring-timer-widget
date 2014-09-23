@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/recurring-timer-widget
 Description: Displays a countdown timer for a recurring event
 Author: Justin Foell
 Author URI: http://foell.org/justin
-Version: 1.3
+Version: 1.4
 */
 
 class RecurringTimerWidget extends WP_Widget {
@@ -25,8 +25,14 @@ class RecurringTimerWidget extends WP_Widget {
 			wp_enqueue_script( 'rt-javascript' );
 
 			//add style if there is one
-			if ( file_exists( dirname( __FILE__ ) . '/recurring-timer.css' ) ) {
-				wp_register_style( 'rt-style', plugins_url('recurring-timer.css', __FILE__ ) );
+			if ( file_exists( get_stylesheet_directory() . '/recurring-timer.css' ) ) {
+				wp_register_style( 'rt-style', get_stylesheet_directory_uri() . '/recurring-timer.css' );
+				wp_enqueue_style( 'rt-style' );
+			} else if ( file_exists( get_template_directory() . '/recurring-timer.css' ) ) {
+				wp_register_style( 'rt-style', get_template_directory_uri() . '/recurring-timer.css' );
+				wp_enqueue_style( 'rt-style' );
+			} else {
+				wp_register_style( 'rt-style', plugins_url( 'recurring-timer.css', __FILE__ ) );
 				wp_enqueue_style( 'rt-style' );
 			}
 		}
@@ -102,12 +108,6 @@ class RecurringTimerWidget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-		/*
-		echo '<pre>';
-		print_r($args);
-		print_r($instance);
-		die();
-		*/
 		//extract args like $before_widget and $after_widget
 		extract( $args );
 
@@ -126,7 +126,6 @@ jQuery(document).ready(function($){
 	));
 });
 </script>
-<?php /* date_default_timezone_set('UTC'); */ ?>
 <div class="rt-content">
 	<span class="rt-countdown">
 		<span class="rt-pair"><span class="rt-days">00</span><label for="rt-days">days</label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
@@ -153,31 +152,36 @@ jQuery(document).ready(function($){
 		$event_duration = strpos( $event_duration, '+' ) === 0 ? $event_duration : '+' . $event_duration;
 
 		$now = time();
-		//the '+1 day' should probably be changed if two events could occur within
-		//a span < 24 hours
+		//initialize event_start and event_start_next to the same value
+		$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
 
-		//these next two blocks could probably be combined into one while :-/
-		$event_start = strtotime( $event_time, strtotime( $event_day ) );
-		$event_end = strtotime( $event_duration, $event_start );
-		$event_start_next = strtotime( $event_time,
-									   strtotime( $event_day,
-												  strtotime(
-													  '+1 day', $event_start ) ) );
-		
-		if ( $now >= $event_end ) {
+		do {
+			//update event_start to event_start_next (only effectively changes after 1st loop)
 			$event_start = $event_start_next;
 			$event_end = strtotime( $event_duration, $event_start );
-			$event_start_next = strtotime( $event_time,
-										   strtotime( $event_day,
-													  strtotime(
-														  '+1 day', $event_start ) ) );
-		}
-		
+			$event_start_next = $this->get_start_next( $event_time, $event_day, $event_start );
+
+		} while ( $now >= $event_end );
+				
 		//put into WP datetime format
 		return array(
 			'start' => date( self::WP_DATE_FORMAT, $event_start ),
 			'end' => date( self::WP_DATE_FORMAT, $event_end ),
 			'start_next' => date( self::WP_DATE_FORMAT, $event_start_next ) );
+	}
+
+	private function get_start_next( $event_time, $event_day, $event_start ) {
+		//increment by days in the case of a monthly event using 'this month'.
+		//the '+n days' should probably be changed if two events could occur within
+		//a span < 24 hours
+		$n = 0;
+		do {
+			$n++;
+			$event_start_next = strtotime( $event_time,
+										   strtotime( $event_day, strtotime( "+{$n} days",
+																			 $event_start ) ) );
+		} while ( $event_start_next <= $event_start );
+		return $event_start_next;
 	}
 }
 
