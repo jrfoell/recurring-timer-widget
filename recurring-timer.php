@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/recurring-timer-widget
 Description: Displays a countdown timer for a recurring event
 Author: Justin Foell
 Author URI: http://foell.org/justin
-Version: 1.4
+Version: 1.5
 */
 
 class RecurringTimerWidget extends WP_Widget {

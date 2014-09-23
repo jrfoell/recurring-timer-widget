@@ -2,7 +2,7 @@
 Contributors: jrfoell
 Tags: widget, timer, recurring, event, plugin
 Tested up to: 4.0
-Stable tag: 1.4
+Stable tag: 1.5
 
 Widget to display a countdown timer for a recurring event.
 
@@ -68,6 +68,11 @@ experiment if your timer is displaying negative time and counting up.
 
 == Changelog ==
 
+= 1.5 = 
+* Replaced call to time() with current_time( 'timestamp' ) to insure
+correct comparison to local time set in Settings -> General ->
+Timezone
+
 = 1.4 =
 * Make sure monthly events do not produce 'negative' countdowns after
 this month's event has occurred.
@@ -81,7 +86,7 @@ single page
 * Fixed misspelled variable affecting next event start
 
 = 1.1 =
-* Changed dates to use GMT -- let the user's browser determine the
+* Changed dates to use GMT - let the user's browser determine the
 timezone
 * Added readme.txt and screenshots
 
