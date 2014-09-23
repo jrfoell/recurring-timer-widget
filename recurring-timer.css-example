@@ -1,0 +1,35 @@
+
+.rt-content {
+	border: 1px dotted;
+	padding: 0px;
+}
+
+.rt-countdown { 
+	display: block;
+	text-align: center;
+}
+
+.rt-pair { 
+	display: block;
+	float: left;
+	margin: 2px;
+	text-align: center;
+	width: 42px;
+	position: relative;
+}
+
+.rt-content label { 
+	display: block;
+}
+
+.rt-separator { 
+	position: absolute;
+	top: 0px;
+	left: 42px;
+}
+
+.rt-description { 
+	display: block;
+	clear: both;
+	padding-left: 10px;
+}
