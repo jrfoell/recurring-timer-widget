@@ -1,12 +1,12 @@
 <?php
-/*
-Plugin Name: Recurring Timer Widget
-Plugin URI: http://wordpress.org/extend/plugins/recurring-timer-widget
-Description: Displays a countdown timer for a recurring event
-Author: Justin Foell
-Author URI: http://foell.org/justin
-Version: 1.5
-*/
+/**
+ * Plugin Name: Recurring Timer Widget
+ * Plugin URI: http://wordpress.org/extend/plugins/recurring-timer-widget
+ * Description: Displays a countdown timer for a recurring event
+ * Author: Justin Foell
+ * Author URI: http://foell.org/justin
+ * Version: 1.6
+ */
 
 class RecurringTimerWidget extends WP_Widget {
 	
@@ -151,23 +151,37 @@ jQuery(document).ready(function($){
 		//add a '+' if they forgot it
 		$event_duration = strpos( $event_duration, '+' ) === 0 ? $event_duration : '+' . $event_duration;
 
-		$now = current_time( 'timestamp' );
+
+		//this was a lot easier when WP didn't use date_default_timezone_set('UTC')
+		//$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
+		//$now = current_time( 'timestamp' );
+
+		$tz = get_option( 'timezone_string' );
+		$now = $tz ? date_create( 'now', new DateTimeZone( $tz ) ) : date_create( 'now', new DateTimeZone( 'UTC' ) );
+
+		//makin' copies
+		$event_start = clone $now;
+		$event_start->modify( $event_time );
+
 		//initialize event_start and event_start_next to the same value
-		$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
+		$event_start_next = clone $event_start;
 
 		do {
 			//update event_start to event_start_next (only effectively changes after 1st loop)
-			$event_start = $event_start_next;
-			$event_end = strtotime( $event_duration, $event_start );
+			$event_start = clone $event_start_next;
+			//$event_end = strtotime( $event_duration, $event_start );
+			$event_end = clone $event_start;
+			$event_end = $event_end->modify( $event_duration );
 			$event_start_next = $this->get_start_next( $event_time, $event_day, $event_start );
-
 		} while ( $now >= $event_end );
 				
 		//put into WP datetime format
-		return array(
-			'start' => date( self::WP_DATE_FORMAT, $event_start ),
-			'end' => date( self::WP_DATE_FORMAT, $event_end ),
-			'start_next' => date( self::WP_DATE_FORMAT, $event_start_next ) );
+		$times = array(
+			'start' => $event_start->format( self::WP_DATE_FORMAT ),
+			'end' => $event_end->format( self::WP_DATE_FORMAT ),
+			'start_next' => $event_start_next->format( self::WP_DATE_FORMAT ) );
+
+		return $times;
 	}
 
 	private function get_start_next( $event_time, $event_day, $event_start ) {
@@ -177,9 +191,11 @@ jQuery(document).ready(function($){
 		$n = 0;
 		do {
 			$n++;
-			$event_start_next = strtotime( $event_time,
-										   strtotime( $event_day, strtotime( "+{$n} days",
-																			 $event_start ) ) );
+			//$event_start_next = strtotime( $event_time, strtotime( $event_day, strtotime( "+{$n} days", $event_start ) ) );
+			$event_start_next = clone $event_start;
+			$event_start_next->modify( "+{$n} days" );
+			$event_start_next->modify( $event_day );
+			$event_start_next->modify( $event_time );
 		} while ( $event_start_next <= $event_start );
 		return $event_start_next;
 	}

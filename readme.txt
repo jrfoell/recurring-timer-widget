@@ -1,7 +1,8 @@
 === Recurring Timer Widget ===
 Contributors: jrfoell
 Tags: widget, timer, recurring, event, plugin
-Tested up to: 4.0
+Requires at least: 3.2
+Tested up to: 4.1
 Stable tag: 1.5
 
 Widget to display a countdown timer for a recurring event.
