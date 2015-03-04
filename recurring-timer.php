@@ -6,6 +6,7 @@
  * Author: Justin Foell
  * Author URI: http://foell.org/justin
  * Version: 1.6
+ * Text Domain: recurring-timer
  */
 
 class RecurringTimerWidget extends WP_Widget {
@@ -20,7 +21,7 @@ class RecurringTimerWidget extends WP_Widget {
 
 	public function init() {
 		//queue if widget is active
-		if ( !is_admin() && is_active_widget( false, false, $this->id_base, true ) ) {
+		if ( ! is_admin() && is_active_widget( false, false, $this->id_base, true ) ) {
 			wp_register_script( 'rt-javascript', plugins_url( 'recurring-timer.js', __FILE__ ), array( 'jquery' ) );
 			wp_enqueue_script( 'rt-javascript' );
 
@@ -56,7 +57,7 @@ class RecurringTimerWidget extends WP_Widget {
 		$event_name = $event_name ? $event_name : 'My Event';
         $event_until = $event_until ? $event_until : 'until';
         $event_now = $event_now ? $event_now : 'is happening now!';
-				
+
         ?>
 		<p><i>* These must be strtotime() friendly. See <a href="http://php.net/strtotime">PHP strtotime()</a> and <a href="http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html">GNU tar date input formats</a></i></p>
         <p>
@@ -128,10 +129,10 @@ jQuery(document).ready(function($){
 </script>
 <div class="rt-content">
 	<span class="rt-countdown">
-		<span class="rt-pair"><span class="rt-days">00</span><label for="rt-days">days</label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-hours">00</span><label for="rt-hours">hours</label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-minutes">00</span><label for="rt-minutes">minutes</label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-seconds">00</span><label for="rt-seconds">seconds</label></span>
+		<span class="rt-pair"><span class="rt-days">00</span><label for="rt-days"><?php _e( 'days', 'recurring-timer' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair"><span class="rt-hours">00</span><label for="rt-hours"><?php _e( 'hours', 'recurring-timer' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair"><span class="rt-minutes">00</span><label for="rt-minutes"><?php _e( 'minutes', 'recurring-timer' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair"><span class="rt-seconds">00</span><label for="rt-seconds"><?php _e( 'seconds', 'recurring-timer' ) ?></label></span>
 	</span>
 	<span class="rt-description">
 		<span class="rt-until"><?php echo $instance['event_until']; ?></span>
@@ -151,14 +152,13 @@ jQuery(document).ready(function($){
 		//add a '+' if they forgot it
 		$event_duration = strpos( $event_duration, '+' ) === 0 ? $event_duration : '+' . $event_duration;
 
-
 		//this was a lot easier when WP didn't use date_default_timezone_set('UTC')
-		//$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
 		//$now = current_time( 'timestamp' );
 
 		$tz = get_option( 'timezone_string' );
 		$now = $tz ? date_create( 'now', new DateTimeZone( $tz ) ) : date_create( 'now', new DateTimeZone( 'UTC' ) );
 
+		//$event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
 		//makin' copies
 		$event_start = clone $now;
 		$event_start->modify( $event_time );
