@@ -3,7 +3,7 @@ Contributors: jrfoell
 Tags: widget, timer, recurring, event, plugin
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.6
+Stable tag: 1.7
 
 Widget to display a countdown timer for a recurring event.
 
@@ -36,7 +36,7 @@ Known issues:
 * [http://www.php.net/manual/en/datetime.formats.relative.php](http://www.php.net/manual/en/datetime.formats.relative.php)
 * [http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html](http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html)
 
-Please note this comment on php.net: [http://us.php.net/manual/en/datetime.formats.relative.php#98989](http://us.php.net/manual/en/datetime.formats.relative.php#98989) In my screenshot example I used "fourth thursday of this month" for the Event Day. It seems this only works in PHP 5.3+. However, removing the 'of' and using "fourth thursday this month" works in earlier versions of PHP. Your mileage may vary, so you'll want to experiment if your timer is displaying negative time and counting up.
+Please note this comment on php.net: [http://us.php.net/manual/en/datetime.formats.relative.php#98989](http://us.php.net/manual/en/datetime.formats.relative.php#98989) In my screenshot example I used "fourth thursday of this month" for the Event Day. This only works in PHP 5.3+. However, removing the 'of' and using "fourth thursday this month" works in earlier versions of PHP. Your mileage may vary, so you'll want to experiment if your timer is displaying negative time and/or counting up.
 
 == Screenshots ==
 
@@ -46,26 +46,29 @@ Please note this comment on php.net: [http://us.php.net/manual/en/datetime.forma
 
 == Changelog ==
 
+= 1.7 =
+* Added more CSS classes for easier targeting/styling.
+
 = 1.6 =
 * Renamed files to support translations via [http://translate.wordpress.org]
 * Fixed issue with monthly events showing up as today when they shouldn't.
 
 = 1.5 = 
-* Replaced call to time() with current_time( 'timestamp' ) to insure correct comparison to local time set in Settings -> General -> Timezone
+* Replaced call to time() with current_time( 'timestamp' ) to insure correct comparison to local time set in Settings -> General -> Timezone.
 
 = 1.4 =
 * Make sure monthly events do not produce 'negative' countdowns after this month's event has occurred.
-* Added default style with option to override in the theme
+* Added default style with option to override in the theme.
 
 = 1.3 =
-* Refactored javascript to allow widget to be placed multiple times on a single page
+* Refactored javascript to allow widget to be placed multiple times on a single page.
 
 = 1.2 =
-* Fixed misspelled variable affecting next event start
+* Fixed misspelled variable affecting next event start.
 
 = 1.1 =
-* Changed dates to use GMT - let the user's browser determine the timezone
-* Added readme.txt and screenshots
+* Changed dates to use GMT - let the user's browser determine the timezone.
+* Added readme.txt and screenshots.
 
 = 1.0 =
-* Initial release
+* Initial release.

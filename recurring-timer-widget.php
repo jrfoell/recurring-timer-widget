@@ -5,7 +5,7 @@
  * Description: Displays a countdown timer for a recurring event
  * Author: Justin Foell
  * Author URI: http://foell.org/justin
- * Version: 1.6
+ * Version: 1.7
  * Text Domain: recurring-timer-widget
  * Domain Path: /languages
  */
@@ -38,6 +38,10 @@ class RecurringTimerWidget extends WP_Widget {
 				wp_enqueue_style( 'rt-style' );
 			}
 		}
+	}
+
+	public function plugins_loaded() {
+		load_plugin_textdomain( 'recurring-timer-widget', false, trailingslashit( dirname( __FILE__ ) ) . 'languages/' );
 	}
 
 	public function form( $instance ) {
@@ -137,10 +141,10 @@ jQuery( document ).ready( function( $ ) {
 </script>
 <div class="rt-content">
 	<span class="rt-countdown">
-		<span class="rt-pair"><span class="rt-days">00</span><label for="rt-days"><?php _e( 'days', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-hours">00</span><label for="rt-hours"><?php _e( 'hours', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-minutes">00</span><label for="rt-minutes"><?php _e( 'minutes', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair"><span class="rt-seconds">00</span><label for="rt-seconds"><?php _e( 'seconds', 'recurring-timer-widget' ) ?></label></span>
+		<span class="rt-pair rt-pair-days"><span class="rt-days">00</span><label class="rt-label rt-label-days" for="rt-days"><?php _e( 'days', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-hours"><span class="rt-hours">00</span><label class="rt-label rt-label-hours" for="rt-hours"><?php _e( 'hours', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-minutes"><span class="rt-minutes">00</span><label class="rt-label rt-label-minutes" for="rt-minutes"><?php _e( 'minutes', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-seconds"><span class="rt-seconds">00</span><label class="rt-label rt-label-seconds" for="rt-seconds"><?php _e( 'seconds', 'recurring-timer-widget' ) ?></label></span>
 	</span>
 	<span class="rt-description">
 		<span class="rt-until"><?php echo $instance['event_until']; ?></span>
@@ -152,7 +156,7 @@ jQuery( document ).ready( function( $ ) {
 		echo $after_widget;
 	}
 
-	function get_event( $instance ) {
+	private function get_event( $instance ) {
 
 		// All must be strtotime() friendly.
 		$event_day = $instance['event_day'];
@@ -217,4 +221,5 @@ jQuery( document ).ready( function( $ ) {
 $rt_widget = new RecurringTimerWidget();
 
 add_action( 'widgets_init', create_function( '', 'return register_widget( "RecurringTimerWidget" );' ) );
+add_action( 'plugins_loaded', array( $rt_widget, 'plugins_loaded' ) );
 add_action( 'init', array( $rt_widget, 'init' ) );
