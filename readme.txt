@@ -1,9 +1,9 @@
 === Recurring Timer Widget ===
 Contributors: jrfoell
 Tags: widget, timer, recurring, event, plugin
-Requires at least: 3.2
-Tested up to: 4.1
-Stable tag: 1.5
+Requires at least: 4.6
+Tested up to: 4.7
+Stable tag: 1.6
 
 Widget to display a countdown timer for a recurring event.
 
@@ -16,12 +16,13 @@ happening. After the event is over, the countdown will begin again.
 Uses string-to-time (strtotime) formats which can be very simple or
 very complex.
 
-The widget has many CSS classes and IDs to style it with, but it's
-been left purposely unstyled so you can format it in whatever way you
-want. The included recurring-timer.css and recurring-timer.css-example
-files show how you can move the time and labels around for a custom
-look. You can customize recurring-timer.css by copying it to your
-active theme's folder.
+The widget has many CSS classes to style it with, but it's been left
+purposely unstyled so you can format it in whatever way you want. The
+included recurring-timer-widget.css and
+recurring-timer-widget.css-example files show how you can move the
+time and labels around for a custom look. You can customize
+recurring-timer-widget.css by copying it to your active theme's
+folder.
 
 Known issues:
 
@@ -40,8 +41,8 @@ tested and may not work.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Add the widget to your site through the 'Widgets' menu in WordPress
 (under 'Appearance').
-1. Optionally copy recurring-timer.css-example or recurring-timer.css
-to recurring-timer.css in your active theme folder to customize the
+1. Optionally copy recurring-timer-widget.css-example or recurring-timer-widget.css
+to recurring-timer-widget.css in your active theme folder to customize the
 style. You may also style the widget by customizing the stylesheet in
 your theme.
 
@@ -49,12 +50,12 @@ your theme.
 
 = Where do I find information about the time formats? =
 
-* http://php.net/strtotime
-* http://www.php.net/manual/en/datetime.formats.relative.php
-* http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html
+* [http://php.net/strtotime]
+* [http://www.php.net/manual/en/datetime.formats.relative.php]
+* [http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html]
 
 Please note this comment on php.net:
-http://us.php.net/manual/en/datetime.formats.relative.php#98989
+[http://us.php.net/manual/en/datetime.formats.relative.php#98989]
 In my screenshot example I used "fourth thursday of this month" for
 the Event Day. It seems this only works in PHP 5.3+. However,
 removing the 'of' and using "fourth thursday this month" works in
@@ -68,6 +69,10 @@ experiment if your timer is displaying negative time and counting up.
 3. The widget using the example CSS file for style.
 
 == Changelog ==
+
+= 1.6 =
+* Renamed files to support translations via [http://translate.wordpress.org]
+* Fixed issue with monthly events showing up as today when they shouldn't.
 
 = 1.5 = 
 * Replaced call to time() with current_time( 'timestamp' ) to insure
