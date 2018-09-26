@@ -5,7 +5,7 @@
  * Description: Displays a countdown timer for a recurring event
  * Author: Justin Foell
  * Author URI: http://foell.org/justin
- * Version: 1.7
+ * Version: 1.8b1
  * Text Domain: recurring-timer-widget
  * Domain Path: /languages
  */
@@ -15,9 +15,14 @@ class RecurringTimerWidget extends WP_Widget {
 	const JS_DATE_FORMAT = 'D, d M Y h:i:s A T';
 	const WP_DATE_FORMAT = 'Y-m-d H:i:s';
 
+	/**
+	 * Widget Constructor.
+	 *
+	 * @author Justin Foell <justin.foell@webdevstudios.com>
+	 * @since  NEXT
+	 */
 	public function __construct() {
-		// widget actual processes
-		parent::__construct( false, $name = __( 'Recurring Timer Widget', 'recurring-timer-widget' ) );
+		parent::__construct( false, __( 'Recurring Timer Widget', 'recurring-timer-widget' ) );
 	}
 
 	public function register_widget() {
@@ -56,22 +61,22 @@ class RecurringTimerWidget extends WP_Widget {
 
 	public function form( $instance ) {
 		// outputs the options form on admin
-		$event_day = isset( $instance['event_day'] ) ? esc_attr( $instance['event_day'] ) : '';
-		$event_time = isset( $instance['event_time'] ) ? esc_attr( $instance['event_time'] ) : '';
+		$event_day      = isset( $instance['event_day'] ) ? esc_attr( $instance['event_day'] ) : '';
+		$event_time     = isset( $instance['event_time'] ) ? esc_attr( $instance['event_time'] ) : '';
 		$event_duration = isset( $instance['event_duration'] ) ? esc_attr( $instance['event_duration'] ) : '';
-		$separator = isset( $instance['separator'] ) ? esc_attr( $instance['separator'] ) : '';
-		$event_name = isset( $instance['event_name'] ) ? esc_attr( $instance['event_name'] ) : '';
-		$event_until = isset( $instance['event_until'] ) ? esc_attr( $instance['event_until'] ) : '';
-		$event_now = isset( $instance['event_now'] ) ? esc_attr( $instance['event_now'] ) : '';
+		$separator      = isset( $instance['separator'] ) ? esc_attr( $instance['separator'] ) : '';
+		$event_name     = isset( $instance['event_name'] ) ? esc_attr( $instance['event_name'] ) : '';
+		$event_until    = isset( $instance['event_until'] ) ? esc_attr( $instance['event_until'] ) : '';
+		$event_now      = isset( $instance['event_now'] ) ? esc_attr( $instance['event_now'] ) : '';
 
 		//provide some defaults
-		$event_day = $event_day ? $event_day : 'this saturday';
-		$event_time = $event_time ? $event_time : '11:00AM';
+		$event_day      = $event_day ? $event_day : 'this saturday';
+		$event_time     = $event_time ? $event_time : '11:00AM';
 		$event_duration = $event_duration ? $event_duration : '+1 hour';
-		$separator = $separator ? $separator : ',';
-		$event_name = $event_name ? $event_name : 'My Event';
-		$event_until = $event_until ? $event_until : 'until';
-		$event_now = $event_now ? $event_now : 'is happening now!';
+		$separator      = $separator ? $separator : ',';
+		$event_name     = $event_name ? $event_name : 'My Event';
+		$event_until    = $event_until ? $event_until : 'until';
+		$event_now      = $event_now ? $event_now : 'is happening now!';
 
 		?>
 		<p><i>
@@ -80,7 +85,7 @@ class RecurringTimerWidget extends WP_Widget {
 				and <a target="_blank" href="%2$s">GNU tar date input formats</a>', 'recurring-timer-widget' ),
 				'http://php.net/strtotime', // PHP strtotime() URL.
 				'http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html' // GNU tar date input URL.
-			 );
+			);
 			?>
 		</i></p>
 		<p>
@@ -111,22 +116,24 @@ class RecurringTimerWidget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'event_now' ); ?>"><?php _e( 'Event "Now":' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_now' ); ?>" name="<?php echo $this->get_field_name( 'event_now' ); ?>" type="text" value="<?php echo $event_now; ?>" />
 		</p>
-		<?php printf( __( '<p>Examples:</p>
+		<?php
+		printf( __( '<p>Examples:</p>
 			<p>1 day, 1 hour, 1 minute, 1 second &lt;Event Until&gt; &lt;Event Name&gt;</p>
-			<p>&lt;Event Name&gt; &lt;Event Now&gt;</p>', 'recurring-timer-widget' ) ); ?>
+			<p>&lt;Event Name&gt; &lt;Event Now&gt;</p>', 'recurring-timer-widget' ) );
+		?>
 		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
 		// processes widget options to be saved from the admin
-		$instance = $old_instance;
-		$instance['event_day'] = strip_tags( $new_instance['event_day'] );
-		$instance['event_time'] = strip_tags( $new_instance['event_time'] );
+		$instance                   = $old_instance;
+		$instance['event_day']      = strip_tags( $new_instance['event_day'] );
+		$instance['event_time']     = strip_tags( $new_instance['event_time'] );
 		$instance['event_duration'] = strip_tags( $new_instance['event_duration'] );
-		$instance['separator'] = strip_tags( $new_instance['separator'] );
-		$instance['event_name'] = strip_tags( $new_instance['event_name'] );
-		$instance['event_until'] = strip_tags( $new_instance['event_until'] );
-		$instance['event_now'] = strip_tags( $new_instance['event_now'] );
+		$instance['separator']      = strip_tags( $new_instance['separator'] );
+		$instance['event_name']     = strip_tags( $new_instance['event_name'] );
+		$instance['event_until']    = strip_tags( $new_instance['event_until'] );
+		$instance['event_now']      = strip_tags( $new_instance['event_now'] );
 		return $instance;
 	}
 
@@ -151,10 +158,10 @@ jQuery( document ).ready( function( $ ) {
 </script>
 <div class="rt-content">
 	<span class="rt-countdown">
-		<span class="rt-pair rt-pair-days"><span class="rt-days">00</span><label class="rt-label rt-label-days" for="rt-days"><?php _e( 'days', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair rt-pair-hours"><span class="rt-hours">00</span><label class="rt-label rt-label-hours" for="rt-hours"><?php _e( 'hours', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair rt-pair-minutes"><span class="rt-minutes">00</span><label class="rt-label rt-label-minutes" for="rt-minutes"><?php _e( 'minutes', 'recurring-timer-widget' ) ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
-		<span class="rt-pair rt-pair-seconds"><span class="rt-seconds">00</span><label class="rt-label rt-label-seconds" for="rt-seconds"><?php _e( 'seconds', 'recurring-timer-widget' ) ?></label></span>
+		<span class="rt-pair rt-pair-days"><span class="rt-days">00</span><label class="rt-label rt-label-days" for="rt-days"><?php _e( 'days', 'recurring-timer-widget' ); ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-hours"><span class="rt-hours">00</span><label class="rt-label rt-label-hours" for="rt-hours"><?php _e( 'hours', 'recurring-timer-widget' ); ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-minutes"><span class="rt-minutes">00</span><label class="rt-label rt-label-minutes" for="rt-minutes"><?php _e( 'minutes', 'recurring-timer-widget' ); ?></label><span class="rt-separator"><?php echo $instance['separator']; ?></span></span>
+		<span class="rt-pair rt-pair-seconds"><span class="rt-seconds">00</span><label class="rt-label rt-label-seconds" for="rt-seconds"><?php _e( 'seconds', 'recurring-timer-widget' ); ?></label></span>
 	</span>
 	<span class="rt-description">
 		<span class="rt-until"><?php echo $instance['event_until']; ?></span>
@@ -169,8 +176,8 @@ jQuery( document ).ready( function( $ ) {
 	private function get_event( $instance ) {
 
 		// All must be strtotime() friendly.
-		$event_day = $instance['event_day'];
-		$event_time = $instance['event_time'];
+		$event_day      = $instance['event_day'];
+		$event_time     = $instance['event_time'];
 		$event_duration = trim( $instance['event_duration'] );
 
 		// Add a '+' if they forgot it.
@@ -178,7 +185,7 @@ jQuery( document ).ready( function( $ ) {
 
 		// This was easier when WP didn't use date_default_timezone_set('UTC'), but maybe less readable?
 		// Old way: $now = current_time( 'timestamp' );
-		$tz = get_option( 'timezone_string' );
+		$tz  = get_option( 'timezone_string' );
 		$now = $tz ? date_create( 'now', new DateTimeZone( $tz ) ) : date_create( 'now', new DateTimeZone( 'UTC' ) );
 
 		// Old way: $event_start = $event_start_next = strtotime( $event_time, strtotime( $event_day ) );
@@ -194,15 +201,15 @@ jQuery( document ).ready( function( $ ) {
 			// Update event_start to event_start_next (only effectively changes after 1st loop).
 			$event_start = clone $event_start_next;
 			// Old way: $event_end = strtotime( $event_duration, $event_start );
-			$event_end = clone $event_start;
-			$event_end = $event_end->modify( $event_duration );
+			$event_end        = clone $event_start;
+			$event_end        = $event_end->modify( $event_duration );
 			$event_start_next = $this->get_start_next( $event_time, $event_day, $event_start );
 		} while ( $now >= $event_end );
 
 		// Put into WP datetime format.
 		$times = array(
-			'start' => $event_start->format( self::WP_DATE_FORMAT ),
-			'end' => $event_end->format( self::WP_DATE_FORMAT ),
+			'start'      => $event_start->format( self::WP_DATE_FORMAT ),
+			'end'        => $event_end->format( self::WP_DATE_FORMAT ),
 			'start_next' => $event_start_next->format( self::WP_DATE_FORMAT ),
 		);
 

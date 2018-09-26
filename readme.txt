@@ -2,7 +2,7 @@
 Contributors: jrfoell
 Tags: widget, timer, recurring, event, plugin
 Requires at least: 4.6
-Tested up to: 4.7
+Tested up to: 4.9
 Stable tag: 1.7
 
 Widget to display a countdown timer for a recurring event.
@@ -46,6 +46,10 @@ Please note this comment on php.net: [http://us.php.net/manual/en/datetime.forma
 
 == Changelog ==
 
+= 1.8 =
+* Removed deprecated create_function() call and put all hooks in widget class.
+* WordPress Coding Standards Formatting
+
 = 1.7 =
 * Added more CSS classes for easier targeting/styling.
 
@@ -53,7 +57,7 @@ Please note this comment on php.net: [http://us.php.net/manual/en/datetime.forma
 * Renamed files to support translations via [http://translate.wordpress.org]
 * Fixed issue with monthly events showing up as today when they shouldn't.
 
-= 1.5 = 
+= 1.5 =
 * Replaced call to time() with current_time( 'timestamp' ) to insure correct comparison to local time set in Settings -> General -> Timezone.
 
 = 1.4 =
