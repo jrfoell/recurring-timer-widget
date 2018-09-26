@@ -20,6 +20,16 @@ class RecurringTimerWidget extends WP_Widget {
 		parent::__construct( false, $name = __( 'Recurring Timer Widget', 'recurring-timer-widget' ) );
 	}
 
+	public function register_widget() {
+		register_widget( __CLASS__ );
+	}
+
+	public function hook() {
+		add_action( 'widgets_init', array( $this, 'register_widget' ) );
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
 	public function init() {
 		//queue if widget is active
 		if ( ! is_admin() && is_active_widget( false, false, $this->id_base, true ) ) {
@@ -66,7 +76,7 @@ class RecurringTimerWidget extends WP_Widget {
 		?>
 		<p><i>
 			<?php
-			printf( __( '* These must be strtotime() friendly. See <a target="_blank" href="%1$s">PHP strtotime()</a> 
+			printf( __( '* These must be strtotime() friendly. See <a target="_blank" href="%1$s">PHP strtotime()</a>
 				and <a target="_blank" href="%2$s">GNU tar date input formats</a>', 'recurring-timer-widget' ),
 				'http://php.net/strtotime', // PHP strtotime() URL.
 				'http://www.gnu.org/software/tar/manual/html_node/Date-input-formats.html' // GNU tar date input URL.
@@ -74,31 +84,31 @@ class RecurringTimerWidget extends WP_Widget {
 			?>
 		</i></p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_day' ); ?>"><?php _e( '* Event Day: (ex: this saturday)' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_day' ); ?>"><?php _e( '* Event Day: (ex: this saturday)' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_day' ); ?>" name="<?php echo $this->get_field_name( 'event_day' ); ?>" type="text" value="<?php echo $event_day; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_time' ); ?>"><?php _e( '* Event Time of Day: (ex: 11:00AM)' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_time' ); ?>"><?php _e( '* Event Time of Day: (ex: 11:00AM)' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_time' ); ?>" name="<?php echo $this->get_field_name( 'event_time' ); ?>" type="text" value="<?php echo $event_time; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_duration' ); ?>"><?php _e( '* Event Duration: (ex: +1 hour)' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_duration' ); ?>"><?php _e( '* Event Duration: (ex: +1 hour)' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_duration' ); ?>" name="<?php echo $this->get_field_name( 'event_duration' ); ?>" type="text" value="<?php echo $event_duration; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'separator' ); ?>"><?php _e( 'Separator: (ex: ,)' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'separator' ); ?>"><?php _e( 'Separator: (ex: ,)' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'separator' ); ?>" name="<?php echo $this->get_field_name( 'separator' ); ?>" type="text" value="<?php echo $separator; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_name' ); ?>"><?php _e( 'Event Name:' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_name' ); ?>"><?php _e( 'Event Name:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_name' ); ?>" name="<?php echo $this->get_field_name( 'event_name' ); ?>" type="text" value="<?php echo $event_name; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_until' ); ?>"><?php _e( 'Event "Until":' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_until' ); ?>"><?php _e( 'Event "Until":' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_until' ); ?>" name="<?php echo $this->get_field_name( 'event_until' ); ?>" type="text" value="<?php echo $event_until; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'event_now' ); ?>"><?php _e( 'Event "Now":' ); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'event_now' ); ?>"><?php _e( 'Event "Now":' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'event_now' ); ?>" name="<?php echo $this->get_field_name( 'event_now' ); ?>" type="text" value="<?php echo $event_now; ?>" />
 		</p>
 		<?php printf( __( '<p>Examples:</p>
@@ -219,7 +229,4 @@ jQuery( document ).ready( function( $ ) {
 }
 
 $rt_widget = new RecurringTimerWidget();
-
-add_action( 'widgets_init', create_function( '', 'return register_widget( "RecurringTimerWidget" );' ) );
-add_action( 'plugins_loaded', array( $rt_widget, 'plugins_loaded' ) );
-add_action( 'init', array( $rt_widget, 'init' ) );
+$rt_widget->hook();
